@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Лента работ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500;1,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--tx:#f8eff2;--mut:#a4939b;--ac:#f0283c;--ac2:#ff6b6b;--bur:#a50f22;--g:linear-gradient(135deg,#ff6b6b,#f0283c 45%,#b3122a);--bd:rgba(255,255,255,.08);--in:rgba(255,255,255,.05);--star:#ff5560;--off:#3d2a2d;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;background:#0a0405}
+body{margin:0;color:var(--tx);font:16px/1.55 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:-10%;z-index:-1;pointer-events:none;background:radial-gradient(55vmax 45vmax at 12% -8%,rgba(170,14,32,.3),transparent 60%),radial-gradient(45vmax 35vmax at 92% 8%,rgba(240,40,60,.07),transparent 60%),radial-gradient(60vmax 40vmax at 50% 112%,rgba(135,12,28,.24),transparent 60%);animation:dr 20s ease-in-out infinite alternate}
+@keyframes dr{to{transform:scale(1.1) translateY(-2%)}}
+button{font:inherit;color:inherit;cursor:pointer}
+.wrap{max-width:1100px;margin:0 auto;padding:0 20px 40px}
+nav{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:22px 0}
+.logo{display:flex;align-items:center;gap:10px;font-weight:600;font-size:18px;letter-spacing:-.01em}
+.logo i{width:14px;height:14px;border-radius:50%;background:var(--g);box-shadow:none}
+.nr{display:flex;gap:8px;align-items:center}
+.btn{background:var(--g);color:#fff;border:0;border-radius:999px;padding:11px 22px;font-weight:500;box-shadow:0 6px 16px -10px rgba(240,40,60,.4);transition:transform .2s,box-shadow .2s,filter .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 22px -10px rgba(240,40,60,.45);filter:brightness(1.07)}
+.btn:disabled{opacity:.5}
+.ghost{background:rgba(255,255,255,.06);border:1px solid var(--bd);border-radius:999px;padding:10px 20px;transition:background .2s}
+.ghost:hover{background:rgba(255,255,255,.12)}
+.chip{display:flex;align-items:center;gap:8px;border:1px solid var(--bd);border-radius:999px;padding:4px 14px 4px 4px;background:rgba(255,255,255,.04)}
+.ava{width:30px;height:30px;border-radius:50%;background:var(--g);display:grid;place-items:center;font-weight:600;font-size:14px}
+.hero{text-align:center;padding:90px 0 70px}
+h1{font-size:clamp(44px,8.5vw,98px);line-height:1;letter-spacing:-.045em;font-weight:500;margin:0 0 24px}
+.ln{display:block;overflow:hidden;padding:.04em .1em .12em}
+.ln>span{display:block;transform:translateY(115%);animation:ln 1.05s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:calc(var(--i)*.14s + .1s)}
+@keyframes ln{to{transform:none}}
+h1 em,h2 em{font:italic 600 1.1em/1 "Cormorant Garamond",Georgia,"Times New Roman",serif;letter-spacing:-.01em;background:var(--g);-webkit-background-clip:text;background-clip:text;color:transparent;padding-right:.08em}
+.sub{color:var(--mut);max-width:420px;margin:0 auto 30px;font-size:17px}
+.cta{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:26px}
+#stl{color:var(--mut);font-size:13px;letter-spacing:.02em}
+.fh{text-align:center;margin-bottom:34px}
+h2{font-size:clamp(32px,5vw,54px);line-height:1.05;letter-spacing:-.04em;font-weight:500;margin:0 0 22px}
+.pn{display:inline-flex;gap:2px;padding:4px;border:1px solid var(--bd);border-radius:999px;background:rgba(255,255,255,.04)}
+.tab{background:transparent;border:0;border-radius:999px;padding:8px 20px;color:var(--mut);transition:background .25s,color .25s,box-shadow .25s}
+.tab:hover{color:var(--tx)}
+.tab.on{background:var(--g);color:#fff;box-shadow:none}
+#st{color:var(--mut);text-align:center;padding:50px 8px}
+.grid{columns:250px;column-gap:18px}
+.gl{position:relative;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);border-radius:22px}
+.card{break-inside:avoid;margin-bottom:18px;overflow:hidden;cursor:pointer;opacity:0;transform:translateY(26px)}
+.card.in{opacity:1;transform:none;transition:opacity .8s,transform .8s cubic-bezier(.2,.7,.2,1),box-shadow .3s,border-color .3s}
+.card.in:hover{transform:translateY(-6px);transition-duration:.25s;border-color:rgba(240,40,60,.35);box-shadow:0 14px 34px -20px rgba(0,0,0,.7)}
+.card::after{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%),rgba(240,40,60,.06),transparent 70%);opacity:0;transition:opacity .3s;pointer-events:none}
+.card:hover::after{opacity:1}
+.pic{position:relative;overflow:hidden;background:#1a0d0e}
+.pic img{width:100%;display:block;transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+.card:hover .pic img{transform:scale(1.06)}
+.badge{position:absolute;top:10px;right:10px;background:rgba(10,4,5,.65);backdrop-filter:blur(8px);border-radius:999px;padding:3px 11px;font-size:13px;font-weight:600}
+.badge b{color:var(--ac2)}
+.cb{padding:13px 16px 15px}
+.cb h3{margin:0 0 4px;font-size:16px;font-weight:500;overflow-wrap:anywhere}
+.meta{display:flex;justify-content:space-between;color:var(--mut);font-size:13px}
+.rv{opacity:0;transform:translateY(26px);transition:opacity .9s,transform .9s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}
+footer{text-align:center;color:var(--mut);font-size:13px;padding:60px 0 0}
+.ov{position:fixed;inset:0;background:rgba(8,2,3,.78);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:14px;z-index:20}
+.ov.open{display:flex}
+.modal{position:relative;background:#120a0b;border:1px solid var(--bd);border-radius:26px;padding:26px;width:100%;max-width:420px;max-height:100%;overflow:auto;display:flex;flex-direction:column;gap:10px;animation:pop .35s cubic-bezier(.2,.7,.2,1) both}
+@keyframes pop{from{opacity:0;transform:translateY(18px) scale(.97)}}
+.modal.big{max-width:1000px;flex-direction:row;padding:0;gap:0;overflow:hidden}
+.x{position:absolute;top:12px;right:14px;background:rgba(10,4,5,.6);border:1px solid var(--bd);border-radius:50%;width:34px;height:34px;z-index:2}
+.modal h2{font-size:28px;margin:0 0 6px}
+input,textarea{width:100%;font:inherit;color:var(--tx);background:var(--in);border:1px solid var(--bd);border-radius:14px;padding:11px 14px;outline:0;transition:border-color .2s}
+input:focus,textarea:focus{border-color:var(--ac)}
+textarea{min-height:76px;resize:vertical}
+.seg{display:flex;gap:6px}.seg .tab{flex:1;border:1px solid var(--bd)}
+.left{flex:1.3;background:#000;display:grid;place-items:center;min-height:200px}
+.left img{max-width:100%;max-height:88vh;display:block}
+.right{flex:1;padding:26px;display:flex;flex-direction:column;gap:10px;min-width:0;max-height:88vh;overflow:auto}
+.right h2{font-size:28px;overflow-wrap:anywhere;margin:0}
+.right h3{margin:8px 0 0;font-weight:500}
+.by{color:var(--mut);font-size:14px}
+.stars{display:flex;gap:2px;align-items:center}
+.star{background:none;border:0;padding:0 2px;font-size:32px;line-height:1;color:var(--off);transition:transform .15s,color .15s}
+.star:hover:not(:disabled){transform:scale(1.25) rotate(-8deg)}.star.on{color:var(--star)}.star:disabled{cursor:default}
+.avg{margin-left:8px;color:var(--mut);font-size:14px}
+.cl{display:flex;flex-direction:column;gap:8px;flex:1}
+.cm{background:var(--in);border:1px solid var(--bd);border-radius:16px;padding:9px 13px;font-size:14px;overflow-wrap:anywhere}
+.cm small{color:var(--mut);display:flex;justify-content:space-between}
+.cm small button{background:none;border:0;color:var(--mut);padding:0}
+.crow{display:flex;gap:8px}.crow input{flex:1}
+.link{background:none;border:0;color:var(--mut);text-decoration:underline;padding:0;align-self:flex-start;font-size:13px}
+#pv{max-width:100%;max-height:200px;border-radius:14px;display:none;margin:0 auto}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--g);color:#fff;padding:11px 18px;border-radius:999px;display:none;z-index:50;font-size:14px;max-width:90vw;box-shadow:0 8px 24px -10px rgba(0,0,0,.6)}
+.ava{overflow:hidden;flex:none}.ava img{width:100%;height:100%;object-fit:cover;display:block}
+.ava.s{width:22px;height:22px;font-size:11px}.ava.xl{width:112px;height:112px;font-size:46px}
+#av,#mn,.logo{cursor:pointer}
+.au{display:flex;align-items:center;gap:6px;min-width:0;cursor:pointer}.au span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.au:hover{color:var(--tx)}
+.ph{display:flex;align-items:center;gap:22px;padding:26px 0 40px;flex-wrap:wrap}.ph h2{font-size:clamp(28px,5vw,44px);margin:0 0 6px;overflow-wrap:anywhere}
+#pst{color:var(--mut);text-align:center;padding:40px 8px}
+.setup{max-width:560px;margin:60px auto;padding:22px}
+.setup code{background:var(--in);padding:1px 6px;border-radius:6px}
+@media(max-width:760px){.hero{padding:60px 0 50px}.modal.big{flex-direction:column;overflow:auto}.right{max-height:none}.left img{max-height:50vh}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.card,.rv,.ln>span{opacity:1!important;transform:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app">
+  <nav>
+    <div class="logo"><i></i>Лента</div>
+    <div class="nr">
+      <button class="ghost" id="login">Войти</button>
+      <div class="chip" id="me" style="display:none"><div class="ava" id="av"></div><span id="mn"></span><button class="link" id="out">выйти</button></div>
+      <button class="btn" id="add">＋ Загрузить</button>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <h1><span class="ln"><span style="--i:0">Покажи работу.</span></span><span class="ln"><span style="--i:1">Получи <em>оценку</em></span></span></h1>
+    <p class="sub rv">Общая лента для авторов. Любой может поставить звёзды и написать комментарий.</p>
+    <div class="cta rv"><button class="btn" id="cta">Загрузить работу</button><button class="ghost" id="see">Смотреть ленту</button></div>
+    <div id="stl" class="rv"></div>
+  </header>
+
+  <section id="feedSec">
+    <div class="fh rv">
+      <div class="pn"><button class="tab on" data-s="new">Новые</button><button class="tab" data-s="top">Лучшие</button><button class="tab" data-s="talk">Обсуждаемые</button></div>
+    </div>
+    <div id="st">Загрузка…</div>
+    <div class="grid" id="grid"></div>
+  </section>
+  <section id="profSec" style="display:none">
+    <button class="link" id="back">← К ленте</button>
+    <div class="ph"><div id="pav"></div><div><h2 id="pname"></h2><div class="by" id="pstat"></div><button class="ghost" id="pchg" style="display:none;margin-top:12px">Сменить аватар</button></div></div>
+    <div id="pst"></div>
+    <div class="grid" id="pgrid"></div>
+  </section>
+  <input type="file" id="avF" accept="image/*" hidden>
+  <footer>Оценивай. Обсуждай. Вдохновляйся.</footer>
+</div>
+
+<div class="ov" id="ovA"><div class="modal">
+  <button class="x" data-close>✕</button>
+  <h2 id="aT">Вход</h2>
+  <div class="seg"><button class="tab on" data-m="in">Вход</button><button class="tab" data-m="up">Регистрация</button></div>
+  <input id="aE" placeholder="Юзернейм" autocomplete="username" autocapitalize="off" spellcheck="false" maxlength="40">
+  <input id="aN" maxlength="30" placeholder="Видимый ник (как вас видят в ленте)" style="display:none">
+  <input id="aP" type="password" placeholder="Пароль (от 6 символов)" autocomplete="current-password">
+  <button class="btn" id="aGo">Войти</button>
+</div></div>
+
+<div class="ov" id="ovU"><div class="modal">
+  <button class="x" data-close>✕</button>
+  <h2>Новая работа</h2>
+  <input type="file" id="uF" accept="image/*">
+  <img id="pv" alt="">
+  <input id="uT" maxlength="80" placeholder="Название">
+  <textarea id="uD" maxlength="400" placeholder="Описание (необязательно)"></textarea>
+  <button class="btn" id="uGo">Опубликовать</button>
+</div></div>
+
+<div class="ov" id="ovP"><div class="modal big" id="pm"></div></div>
+<div id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+/* 1. Создайте проект на supabase.com  2. SQL Editor → вставьте setup.sql → Run
+   3. Settings → API: скопируйте Project URL и anon public key сюда.
+   (Authentication → Providers → Email → выключите «Confirm email», чтобы вход был сразу) */
+const SUPABASE_URL = "https://wfdsbsnylutymajomenn.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndmZHNic255bHV0eW1ham9tZW5uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM2OTc2NzMsImV4cCI6MjEwOTI3MzY3M30.kfpB9phL047FKZVQTnwvpuaQUMnB0sM3n0LN-YegDcg";
+
+/* Вход по юзернейму: под капотом это email юзернейм@MAIL_DOMAIN, письма не отправляются.
+   Если Supabase ругается на адрес — поставьте сюда любой реальный домен. */
+const MAIL_DOMAIN="worksfeed.app";
+const $=s=>document.querySelector(s);
+const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
+let sb,me=null,profs={},curU=null,posts=[],stats={},mine={},sort="new",img=null,amode="in";
+const toast=t=>{const e=$("#toast");e.textContent=t;e.style.display="block";clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display="none",3500)};
+const uname=u=>u?((u.user_metadata&&u.user_metadata.name)||(u.email||"").split("@")[0]||"Аноним"):"";
+const ago=d=>{const s=(Date.now()-new Date(d))/1000;return s<60?"только что":s<3600?Math.floor(s/60)+" мин назад":s<86400?Math.floor(s/3600)+" ч назад":Math.floor(s/86400)+" дн назад"};
+const safeImg=u=>typeof u==="string"&&u.startsWith(SUPABASE_URL+"/storage/");
+const ava=(uid,name,cls)=>{const a=el("div","ava"+(cls?" "+cls:"")),p=profs[uid];if(p&&safeImg(p.avatar_url)){const i=el("img");i.src=p.avatar_url;i.alt="";a.append(i)}else a.textContent=(name||"?").charAt(0).toUpperCase();return a};
+const goUser=uid=>{close("#ovP");location.hash="user-"+uid};
+const open=id=>$(id).classList.add("open"),close=id=>$(id).classList.remove("open");
+document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>b.closest(".ov").classList.remove("open"));
+document.querySelectorAll(".ov").forEach(o=>o.onclick=e=>{if(e.target===o)o.classList.remove("open")});
+
+async function init(){
+  if(!SUPABASE_URL||!SUPABASE_KEY){
+    $("#app").innerHTML='<div class="setup"><h2>Осталось подключить сервер</h2><ol><li>Создайте бесплатный проект на <b>supabase.com</b>.</li><li>SQL Editor → вставьте содержимое <code>setup.sql</code> → Run.</li><li>Authentication → Providers → Email: выключите «Confirm email».</li><li>Settings → API: скопируйте <code>Project URL</code> и <code>anon public key</code> в начало скрипта этого файла (<code>SUPABASE_URL</code>, <code>SUPABASE_KEY</code>).</li></ol></div>';
+    return;
+  }
+  sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+  const {data}=await sb.auth.getSession();
+  setMe(data.session&&data.session.user);
+  sb.auth.onAuthStateChange(async(_,s)=>{setMe(s&&s.user);await loadMine();render()});
+  await Promise.all([load(),loadMine()]);render();route();
+}
+function setMe(u){
+  me=u||null;
+  $("#login").style.display=me?"none":"";
+  $("#me").style.display=me?"flex":"none";
+  paintMe();
+}
+function paintMe(){
+  if(!me)return;const n=uname(me),a=ava(me.id,n);a.id="av";a.title="Мой профиль";a.onclick=()=>goUser(me.id);
+  $("#av").replaceWith(a);const m=$("#mn");m.textContent=n;m.onclick=()=>goUser(me.id);
+}
+async function load(){
+  const [p,s,pr]=await Promise.all([
+    sb.from("posts").select("*").order("created_at",{ascending:false}).limit(120),
+    sb.from("post_stats").select("*"),
+    sb.from("profiles").select("*")]);
+  if(p.error){$("#st").textContent="Не удалось загрузить ленту: "+p.error.message;return}
+  posts=p.data;profs={};(pr.data||[]).forEach(r=>profs[r.user_id]=r);stats={};(s.data||[]).forEach(r=>stats[r.post_id]=r);
+}
+async function loadMine(){
+  mine={};if(!me)return;
+  const r=await sb.from("ratings").select("post_id,score").eq("user_id",me.id);
+  (r.data||[]).forEach(x=>mine[x.post_id]=x.score);
+}
+
+function render(){hero();paintMe();renderProf();
+  const g=$("#grid"),a=p=>(stats[p.id]||{});
+  const l=posts.slice();
+  if(sort==="top")l.sort((x,y)=>(a(y).avg||0)-(a(x).avg||0)||(a(y).n||0)-(a(x).n||0));
+  if(sort==="talk")l.sort((x,y)=>(a(y).cc||0)-(a(x).cc||0));
+  g.replaceChildren(...l.map((p,i)=>card(p,i)));g.querySelectorAll(".card").forEach(c=>io.observe(c));
+  $("#st").style.display=l.length?"none":"block";
+  if(!l.length)$("#st").textContent="Пока пусто. Загрузите первую работу!";
+}
+function card(p,i){
+  const c=el("article","card gl");c.style.animationDelay=Math.min(i,10)*40+"ms";
+  const pic=el("div","pic");
+  if(safeImg(p.image_url)){const im=el("img");im.src=p.image_url;im.alt=p.title;im.loading="lazy";pic.append(im)}
+  const s=stats[p.id]||{};
+  if(s.n){const b=el("div","badge");const st=el("b","","★");b.append(st," "+s.avg.toFixed(1));pic.append(b)}
+  c.append(pic);
+  const cb=el("div","cb");cb.append(el("h3","",p.title));
+  const m=el("div","meta");const au=el("span","au");au.append(ava(p.user_id,p.author_name,"s"),el("span","",p.author_name));au.onclick=e=>{e.stopPropagation();goUser(p.user_id)};
+  m.append(au,el("span","","💬 "+(s.cc||0)));
+  cb.append(m);c.append(cb);c.onclick=()=>openPost(p);return c;
+}
+document.querySelectorAll("[data-s]").forEach(t=>t.onclick=()=>{sort=t.dataset.s;document.querySelectorAll("[data-s]").forEach(x=>x.classList.toggle("on",x===t));render()});
+
+/* ---- страница работы ---- */
+function stars(p,box){
+  box.replaceChildren();
+  const own=me&&p.user_id===me.id,s=stats[p.id]||{};
+  for(let n=1;n<=5;n++){
+    const b=el("button","star"+(mine[p.id]>=n?" on":""),"★");b.type="button";
+    b.disabled=!!own;b.title=own?"Свою работу оценить нельзя":me?"Оценка: "+n:"Войдите, чтобы оценить";
+    b.onclick=()=>rate(p,n,box);box.append(b);
+  }
+  box.append(el("span","avg",s.n?s.avg.toFixed(1)+" · оценок: "+s.n:"Оценок пока нет"));
+}
+async function rate(p,n,box){
+  if(!me){open("#ovA");return}
+  const r=await sb.from("ratings").upsert({post_id:p.id,user_id:me.id,score:n});
+  if(r.error)return toast("Не удалось оценить: "+r.error.message);
+  mine[p.id]=n;await load();stars(p,box);render();
+}
+async function openPost(p){
+  const m=$("#pm");m.replaceChildren();
+  const x=el("button","x","✕");x.onclick=()=>close("#ovP");
+  const L=el("div","left");if(safeImg(p.image_url)){const im=el("img");im.src=p.image_url;im.alt=p.title;L.append(im)}
+  const R=el("div","right");
+  const by=el("div","by au");by.append(ava(p.user_id,p.author_name,"s"),el("span","",p.author_name+" · "+ago(p.created_at)));by.onclick=()=>goUser(p.user_id);
+  R.append(el("h2","",p.title),by);
+  if(p.descr)R.append(el("div","",p.descr));
+  const sb_=el("div","stars");stars(p,sb_);R.append(sb_);
+  if(me&&me.id===p.user_id){
+    const d=el("button","link","Удалить работу");
+    d.onclick=async()=>{
+      if(d.dataset.k!=="1"){d.dataset.k="1";d.textContent="Точно удалить?";return}
+      const path=p.image_url.split("/works/")[1];
+      const r=await sb.from("posts").delete().eq("id",p.id);
+      if(r.error)return toast("Не удалось удалить");
+      if(path)sb.storage.from("works").remove([decodeURIComponent(path)]);
+      close("#ovP");await load();render();
+    };R.append(d);
+  }
+  R.append(el("h3","","Комментарии"));
+  const cl=el("div","cl");R.append(cl);
+  const row=el("div","crow"),inp=el("input");inp.maxLength=500;inp.placeholder=me?"Написать комментарий…":"Войдите, чтобы комментировать";
+  const go=el("button","btn","➤");row.append(inp,go);R.append(row);
+  const send=async()=>{
+    if(!me){open("#ovA");return}
+    const body=inp.value.trim();if(!body)return;go.disabled=true;
+    const r=await sb.from("comments").insert({post_id:p.id,body,author_name:uname(me)});
+    go.disabled=false;
+    if(r.error)return toast("Не удалось отправить: "+r.error.message);
+    inp.value="";await comments(p,cl);await load();render();
+  };
+  go.onclick=send;inp.onkeydown=e=>{if(e.key==="Enter")send()};
+  m.append(x,L,R);open("#ovP");comments(p,cl);
+}
+async function comments(p,cl){
+  const r=await sb.from("comments").select("*").eq("post_id",p.id).order("created_at");
+  cl.replaceChildren();
+  if(r.error)return cl.append(el("div","by","Не удалось загрузить комментарии"));
+  if(!r.data.length)cl.append(el("div","by","Пока нет комментариев. Будьте первым!"));
+  r.data.forEach(c=>{
+    const b=el("div","cm"),h=el("small");
+    h.append(el("span","",c.author_name+" · "+ago(c.created_at)));
+    if(me&&c.user_id===me.id){
+      const d=el("button","","удалить");
+      d.onclick=async()=>{await sb.from("comments").delete().eq("id",c.id);await comments(p,cl);await load();render()};
+      h.append(d);
+    }
+    b.append(h,el("div","",c.body));cl.append(b);
+  });
+}
+
+/* ---- аккаунт ---- */
+$("#login").onclick=()=>open("#ovA");
+$("#out").onclick=async()=>{await sb.auth.signOut();toast("Вы вышли")};
+document.querySelectorAll("#ovA .seg .tab").forEach(t=>t.onclick=()=>{
+  amode=t.dataset.m;
+  document.querySelectorAll("#ovA .seg .tab").forEach(x=>x.classList.toggle("on",x===t));
+  $("#aN").style.display=amode==="up"?"":"none";
+  $("#aE").placeholder=amode==="up"?"Юзернейм для входа (латиница, цифры, _)":"Юзернейм";
+  $("#aT").textContent=$("#aGo").textContent=amode==="up"?"Регистрация":"Вход";
+});
+$("#aGo").onclick=async()=>{
+  const raw=$("#aE").value.trim(),password=$("#aP").value;
+  if(!raw||password.length<6)return toast("Введите юзернейм и пароль от 6 символов");
+  const b=$("#aGo");b.disabled=true;
+  let r;
+  if(amode==="up"){
+    const user=raw.toLowerCase(),name=$("#aN").value.trim();
+    if(!/^[a-z0-9_]{3,20}$/.test(user)){b.disabled=false;return toast("Юзернейм: 3–20 символов, латиница, цифры и _")}
+    if(!name){b.disabled=false;return toast("Введите видимый ник")}
+    r=await sb.auth.signUp({email:user+"@"+MAIL_DOMAIN,password,options:{data:{name,username:user}}});
+    if(!r.error&&!r.data.session){b.disabled=false;close("#ovA");return toast("В Supabase отключите «Confirm email» (Authentication → Providers → Email)")}
+    if(!r.error&&r.data.session)sb.from("profiles").upsert({user_id:r.data.user.id,name,username:user});
+  }else r=await sb.auth.signInWithPassword({email:raw.includes("@")?raw:raw.toLowerCase()+"@"+MAIL_DOMAIN,password});
+  b.disabled=false;
+  if(r.error){const m=r.error.message;return toast(/already|registered/i.test(m)?"Этот юзернейм уже занят":/invalid login/i.test(m)?"Неверный юзернейм или пароль":m)}
+  close("#ovA");toast("Добро пожаловать, "+uname(r.data.user)+"!");
+};
+
+/* ---- загрузка ---- */
+$("#add").onclick=()=>me?open("#ovU"):(toast("Сначала войдите в аккаунт"),open("#ovA"));
+function shrink(file){
+  return new Promise((res,rej)=>{
+    const u=URL.createObjectURL(file),i=new Image();
+    i.onerror=()=>rej(new Error("bad"));
+    i.onload=()=>{
+      URL.revokeObjectURL(u);
+      const k=Math.min(1,1600/Math.max(i.width,i.height)),c=document.createElement("canvas");
+      c.width=Math.round(i.width*k);c.height=Math.round(i.height*k);
+      const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(i,0,0,c.width,c.height);
+      c.toBlob(b=>b?res(b):rej(new Error("blob")),"image/jpeg",.85);
+    };
+    i.src=u;
+  });
+}
+$("#uF").onchange=async e=>{
+  const f=e.target.files[0];if(!f)return;
+  try{img=await shrink(f);const p=$("#pv");p.src=URL.createObjectURL(img);p.style.display="block"}
+  catch(_){img=null;toast("Не получилось обработать картинку")}
+};
+$("#uGo").onclick=async()=>{
+  const title=$("#uT").value.trim();
+  if(!img)return toast("Выберите картинку");
+  if(!title)return toast("Введите название");
+  const b=$("#uGo");b.disabled=true;b.textContent="Загружаю…";
+  try{
+    const path=me.id+"/"+Date.now()+".jpg";
+    const up=await sb.storage.from("works").upload(path,img,{contentType:"image/jpeg"});
+    if(up.error)throw up.error;
+    const url=sb.storage.from("works").getPublicUrl(path).data.publicUrl;
+    const r=await sb.from("posts").insert({title,descr:$("#uD").value.trim()||null,image_url:url,author_name:uname(me)});
+    if(r.error)throw r.error;
+    close("#ovU");img=null;$("#uF").value=$("#uT").value=$("#uD").value="";$("#pv").style.display="none";
+    toast("Работа опубликована");await load();render();
+  }catch(e){toast("Ошибка: "+(e.message||e))}
+  b.disabled=false;b.textContent="Опубликовать";
+};
+
+/* ---- профиль ---- */
+function sq(file){return new Promise((res,rej)=>{const u=URL.createObjectURL(file),i=new Image();i.onerror=()=>rej(new Error("bad"));i.onload=()=>{URL.revokeObjectURL(u);const k=Math.min(i.width,i.height),c=document.createElement("canvas");c.width=c.height=256;c.getContext("2d").drawImage(i,(i.width-k)/2,(i.height-k)/2,k,k,0,0,256,256);c.toBlob(b=>b?res(b):rej(new Error("blob")),"image/jpeg",.88)};i.src=u})}
+function renderProf(){
+  if(!curU)return;
+  const mp=posts.filter(p=>p.user_id===curU),self=me&&me.id===curU;
+  const nm=(profs[curU]&&profs[curU].name)||(self?uname(me):"")||(mp[0]&&mp[0].author_name)||"Автор";
+  const a=ava(curU,nm,"xl");a.id="pav";$("#pav").replaceWith(a);
+  $("#pname").textContent=nm;
+  let n=0,t=0;mp.forEach(p=>{const s=stats[p.id];if(s&&s.n){n+=s.n;t+=s.avg*s.n}});
+  const un=(profs[curU]&&profs[curU].username)||(self&&me.user_metadata&&me.user_metadata.username)||"";
+  $("#pstat").textContent=(un?"@"+un+" · ":"")+"Работ: "+mp.length+(n?" · ★ "+(t/n).toFixed(1)+" (оценок: "+n+")":"");
+  $("#pchg").style.display=self?"":"none";
+  const g=$("#pgrid");g.replaceChildren(...mp.map((p,i)=>card(p,i)));g.querySelectorAll(".card").forEach(c=>io.observe(c));
+  $("#pst").style.display=mp.length?"none":"block";
+  $("#pst").textContent=self?"Вы ещё ничего не выложили.":"Пока нет работ.";
+}
+function route(){
+  const m=location.hash.match(/^#user-([0-9a-f-]{36})$/i);curU=m?m[1]:null;
+  document.querySelector("header.hero").style.display=$("#feedSec").style.display=curU?"none":"";
+  $("#profSec").style.display=curU?"":"none";
+  renderProf();scrollTo(0,0);
+}
+window.onhashchange=route;
+$("#back").onclick=()=>{location.hash=""};
+document.querySelector(".logo").onclick=()=>{location.hash=""};
+$("#pchg").onclick=()=>$("#avF").click();
+$("#avF").onchange=async e=>{
+  const f=e.target.files[0];e.target.value="";if(!f||!me)return;
+  const b=$("#pchg");b.disabled=true;b.textContent="Загружаю…";
+  try{
+    const blob=await sq(f),path=me.id+"/avatar-"+Date.now()+".jpg";
+    const up=await sb.storage.from("works").upload(path,blob,{contentType:"image/jpeg"});
+    if(up.error)throw up.error;
+    const url=sb.storage.from("works").getPublicUrl(path).data.publicUrl;
+    const old=profs[me.id]&&profs[me.id].avatar_url,oldPath=old&&old.split("/works/")[1];
+    const r=await sb.from("profiles").upsert({user_id:me.id,name:uname(me),username:(me.user_metadata&&me.user_metadata.username)||(profs[me.id]&&profs[me.id].username)||null,avatar_url:url});
+    if(r.error)throw new Error("выполните setup-profiles.sql в Supabase ("+r.error.message+")");
+    if(oldPath)sb.storage.from("works").remove([decodeURIComponent(oldPath)]);
+    toast("Аватар обновлён");await load();render();
+  }catch(er){toast("Ошибка: "+(er.message||er))}
+  b.disabled=false;b.textContent="Сменить аватар";
+};
+
+/* ---- анимации и оформление ---- */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.1});
+document.querySelectorAll(".rv").forEach(e=>io.observe(e));
+function hero(){
+  let r=0,c=0;Object.values(stats).forEach(s=>{r+=s.n||0;c+=s.cc||0});
+  $("#stl").textContent=posts.length+" работ · "+r+" оценок · "+c+" комментариев";
+}
+["#grid","#pgrid"].forEach(q=>$(q).addEventListener("pointermove",e=>{
+  const c=e.target.closest(".card");if(!c)return;
+  const r=c.getBoundingClientRect();c.style.setProperty("--mx",e.clientX-r.left+"px");c.style.setProperty("--my",e.clientY-r.top+"px");
+}));
+$("#cta").onclick=()=>$("#add").click();
+const goFeed=()=>$("#feedSec").scrollIntoView({behavior:"smooth"});
+$("#see").onclick=goFeed;
+init();
+</script>
+</body>
+</html>
